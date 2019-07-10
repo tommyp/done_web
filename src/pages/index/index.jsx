@@ -13,8 +13,9 @@ const LIST_ITEMS = gql`
 `
 
 const UPDATE_COMPLETED = gql`
-  mutation UpdateCompleted($id: Int!) {
-    updateCompleted(id: $id) {
+  mutation UpdateCompleted($id: Int!, $completed: Boolean!) {
+    updateCompleted(id: $id, completed: $completed) {
+      id
       completed
     }
   }
@@ -43,7 +44,8 @@ export default class extends React.Component {
                         checked={item.completed}
                         onChange={e => {
                           e.preventDefault()
-                          updateCompleted({ variables: { completed: input.checked, id: item.id } })
+                          console.log(e)
+                          updateCompleted({ variables: { completed: !item.completed, id: item.id } })
                         }}
                         ref={node => {
                           input = node;
