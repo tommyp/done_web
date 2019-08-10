@@ -1,6 +1,7 @@
 import React from "react";
 import { Query, Mutation } from "react-apollo";
 import gql from "graphql-tag";
+import CreateItem from "../../components/createItem";
 
 const LIST_ITEMS = gql`
   {
@@ -10,7 +11,7 @@ const LIST_ITEMS = gql`
       completed
     }
   }
-`
+`;
 
 const UPDATE_COMPLETED = gql`
   mutation UpdateCompleted($id: Int!, $completed: Boolean!) {
@@ -19,56 +20,17 @@ const UPDATE_COMPLETED = gql`
       completed
     }
   }
-`
-
-const CREATE_ITEM = gql`
-  mutation CreateItem($name: String!) {
-    createItem(name: $name) {
-      id
-      name
-      completed
-    }
-  }
-`
+`;
 
 export default class extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
   }
 
   render() {
-    let input;
     return (
       <React.Fragment>
-        <Mutation
-          mutation={CREATE_ITEM}
-          update={(cache, { data: { createItem } }) => {
-            const { items } = cache.readQuery({ query: LIST_ITEMS });
-            cache.writeQuery({
-              query: LIST_ITEMS,
-              data: { items: items.concat([createItem]) },
-            })
-          }}
-        >
-          {createItem => (
-            <React.Fragment>
-              <form
-                onSubmit={e => {
-                  e.preventDefault()
-                  createItem({ variables: { name: input.value } })
-                  input.value = "";
-                }}
-              >
-                <input
-                  ref={node => {
-                    input = node;
-                  }}
-                />
-                <button type="submit">Submit</button>
-              </form>
-            </React.Fragment>
-          )}
-        </Mutation>
+        <CreateItem cacheQuery={LIST_ITEMS} />
 
         <Query query={LIST_ITEMS}>
           {({ loading, error, data }) => {
@@ -81,11 +43,18 @@ export default class extends React.Component {
                   <li key={item.id}>
                     <Mutation mutation={UPDATE_COMPLETED}>
                       {(updateCompleted, { data }) => (
-                        <input key={`chk-${item.id}`} type="checkbox"
+                        <input
+                          key={`chk-${item.id}`}
+                          type="checkbox"
                           checked={item.completed}
                           onChange={e => {
-                            e.preventDefault()
-                            updateCompleted({ variables: { completed: !item.completed, id: item.id } })
+                            e.preventDefault();
+                            updateCompleted({
+                              variables: {
+                                completed: !item.completed,
+                                id: item.id
+                              }
+                            });
                           }}
                         />
                       )}
@@ -95,10 +64,10 @@ export default class extends React.Component {
                   </li>
                 ))}
               </ul>
-            )
+            );
           }}
         </Query>
       </React.Fragment>
-    )
+    );
   }
 }
