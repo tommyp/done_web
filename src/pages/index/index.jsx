@@ -2,6 +2,7 @@ import React from "react";
 import { Query, Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import CreateItem from "../../components/createItem";
+import Item from "../../components/item";
 
 const LIST_ITEMS = gql`
   {
@@ -40,28 +41,7 @@ export default class extends React.Component {
             return (
               <ul>
                 {data.items.map(item => (
-                  <li key={item.id}>
-                    <Mutation mutation={UPDATE_COMPLETED}>
-                      {(updateCompleted, { data }) => (
-                        <input
-                          key={`chk-${item.id}`}
-                          type="checkbox"
-                          checked={item.completed}
-                          onChange={e => {
-                            e.preventDefault();
-                            updateCompleted({
-                              variables: {
-                                completed: !item.completed,
-                                id: item.id
-                              }
-                            });
-                          }}
-                        />
-                      )}
-                    </Mutation>
-
-                    {item.name}
-                  </li>
+                  <Item item={item} />
                 ))}
               </ul>
             );
