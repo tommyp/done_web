@@ -29,9 +29,12 @@ export default class extends React.Component {
       redirect: "follow",
       referrer: "no-referrer",
       body: JSON.stringify(this.state)
-    }).then(function(data) {
-      debugger;
-    });
+    })
+      .then(resp => resp.json())
+      .then(function(data) {
+        debugger;
+        document.cookie = `token=${data.jwt}`;
+      });
   }
 
   handleChange(e) {
