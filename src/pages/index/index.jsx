@@ -1,5 +1,5 @@
 import React from "react";
-import { Query, Mutation } from "react-apollo";
+import { Query } from "react-apollo";
 import gql from "graphql-tag";
 import CreateItem from "../../components/createItem";
 import Item from "../../components/item";
@@ -14,19 +14,7 @@ const LIST_ITEMS = gql`
   }
 `;
 
-const UPDATE_COMPLETED = gql`
-  mutation UpdateCompleted($id: Int!, $completed: Boolean!) {
-    updateCompleted(id: $id, completed: $completed) {
-      id
-      completed
-    }
-  }
-`;
-
 export default class extends React.Component {
-  constructor(props) {
-    super(props);
-  }
 
   render() {
     return (
