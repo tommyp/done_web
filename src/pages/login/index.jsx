@@ -1,4 +1,5 @@
 import React from "react";
+import { makeRequest } from "../../utils/makeRequest";
 
 const LOGIN_URL = "http://localhost:4000/api/v1/sign_in";
 
@@ -17,18 +18,10 @@ export default class extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    debugger;
-    fetch(LOGIN_URL, {
-      method: "POST",
-      mode: "cors",
-      cache: "no-cache",
-      credentials: "same-origin",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      redirect: "follow",
-      referrer: "no-referrer",
-      body: JSON.stringify(this.state)
+    const self = this;
+    makeRequest(LOGIN_URL, "POST", this.state).then(function(data) {
+      document.cookie = `token=${data.jwt}`;
+      self.setState({ redirect: true });
     });
   }
 

@@ -1,4 +1,6 @@
 import React from "react";
+import { Redirect } from "react-router-dom";
+import { makeRequest } from "../../utils/makeRequest";
 
 const SIGNUP_URL = "http://localhost:4000/api/v1/sign_up";
 
@@ -12,29 +14,18 @@ export default class extends React.Component {
     this.state = {
       email: "",
       password: "",
-      password_confirmation: ""
+      password_confirmation: "",
+      redirect: false
     };
   }
 
   handleSubmit(e) {
     e.preventDefault();
-    fetch(SIGNUP_URL, {
-      method: "POST",
-      mode: "cors",
-      cache: "no-cache",
-      credentials: "same-origin",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      redirect: "follow",
-      referrer: "no-referrer",
-      body: JSON.stringify(this.state)
-    })
-      .then(resp => resp.json())
-      .then(function(data) {
-        debugger;
-        document.cookie = `token=${data.jwt}`;
-      });
+    const self = this;
+    makeRequest(SIGNUP_URL, "POST", this.state).then(function(data) {
+      document.cookie = `token=${data.jwt}`;
+      self.setState({ redirect: true });
+    });
   }
 
   handleChange(e) {
@@ -75,6 +66,7 @@ export default class extends React.Component {
           <br />
           <button type="submit">Login</button>
         </form>
+        {this.state.redirect && <Redirect to="/" />}
       </React.Fragment>
     );
   }
