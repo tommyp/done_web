@@ -4,12 +4,13 @@ import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { ApolloProvider } from "react-apollo";
-import ApolloClient, { InMemoryCache } from "apollo-boost";
+import { InMemoryCache } from "apollo-boost";
+import { ApolloClient } from "apollo-client";
 import { createHttpLink } from "apollo-link-http";
 import { setContext } from "apollo-link-context";
 
 const httpLink = createHttpLink({
-  uri: "http://localhost:4000/api/graphql"
+  uri: "http://localhost:4000/graphql"
 });
 
 const authLink = setContext((_, { headers }) => {

@@ -22,8 +22,9 @@ export default class extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     const self = this;
+    const localStorage = window.localStorage;
     makeRequest(SIGNUP_URL, "POST", this.state).then(function(data) {
-      document.cookie = `token=${data.jwt}`;
+      localStorage.setItem("token", data.jwt);
       self.setState({ redirect: true });
     });
   }
@@ -66,7 +67,7 @@ export default class extends React.Component {
           <br />
           <button type="submit">Login</button>
         </form>
-        {this.state.redirect && <Redirect to="/" />}
+        {this.state.redirect && <Redirect to="/today" />}
       </React.Fragment>
     );
   }

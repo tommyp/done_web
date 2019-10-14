@@ -1,5 +1,6 @@
 import React from "react";
 import { makeRequest } from "../../utils/makeRequest";
+import { Redirect } from "react-router-dom";
 
 const LOGIN_URL = "http://localhost:4000/api/v1/sign_in";
 
@@ -19,8 +20,9 @@ export default class extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     const self = this;
+    const localStorage = window.localStorage;
     makeRequest(LOGIN_URL, "POST", this.state).then(function(data) {
-      document.cookie = `token=${data.jwt}`;
+      localStorage.setItem("token", data.jwt);
       self.setState({ redirect: true });
     });
   }
@@ -55,6 +57,7 @@ export default class extends React.Component {
           <br />
           <button type="submit">Login</button>
         </form>
+        {this.state.redirect && <Redirect to="/today" />}
       </React.Fragment>
     );
   }

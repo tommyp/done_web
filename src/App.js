@@ -12,9 +12,9 @@ function App() {
     <div className="App">
       <Router>
         <Route path="/" exact component={Home} />
-        <Route path="/today" exact component={Index} />
         <Route path="/login" exact component={Login} />
         <Route path="/signup" exact component={Signup} />
+        <Route path="/today" exact component={Index} />
       </Router>
     </div>
   );
