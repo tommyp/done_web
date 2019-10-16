@@ -6,6 +6,9 @@ import Item from "../../components/item";
 
 const LIST_ITEMS = gql`
   {
+    profile {
+      email
+    }
     items {
       id
       name
@@ -27,11 +30,14 @@ export default class extends React.Component {
             if (error) return "Error";
 
             return (
-              <ul>
-                {data.items.map(item => (
-                  <Item item={item} />
-                ))}
-              </ul>
+              <React.Fragment>
+                <h1>{data.profile.email}</h1>
+                <ul>
+                  {data.items.map(item => (
+                    <Item item={item} />
+                  ))}
+                </ul>
+              </React.Fragment>
             );
           }}
         </Query>
