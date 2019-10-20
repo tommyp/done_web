@@ -16,11 +16,10 @@ export default class extends React.Component {
     const { item } = this.props;
 
     return (
-      <li key={item.id}>
+      <li>
         <Mutation mutation={UPDATE_COMPLETED}>
           {(updateCompleted, { data }) => (
             <input
-              key={`chk-${item.id}`}
               type="checkbox"
               checked={item.completed}
               onChange={e => {
