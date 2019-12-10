@@ -43,28 +43,32 @@ export default class extends React.Component {
             if (loading) return "Loading...";
             if (error) return "Error";
 
-            return <h1>{data.profile.email}</h1>;
-          }}
-        </Query>
-
-        <CreateItem cacheQuery={LIST_ITEMS} />
-
-        <Query query={LIST_ITEMS} variables={{date: this.date()}} key="2">
-          {({ loading, error, data }) => {
-            if (loading) return "Loading...";
-            if (error) return "Error";
-
             return (
-              <React.Fragment>
-                <ul>
-                  {data.items.map(item => (
-                    <Item item={item} key={item.id} />
-                  ))}
-                </ul>
-              </React.Fragment>
+              <h1>
+                {data.profile.email}
+              </h1>
             );
           }}
         </Query>
+
+        <section className={styles.itemList}>
+          <CreateItem cacheQuery={LIST_ITEMS} />
+
+          <Query query={LIST_ITEMS} variables={{ date: this.date() }} key="2">
+            {({ loading, error, data }) => {
+              if (loading) return "Loading...";
+              if (error) return "Error";
+
+              return (
+                <React.Fragment>
+                  <ul>
+                    {data.items.map(item => <Item item={item} key={item.id} />)}
+                  </ul>
+                </React.Fragment>
+              );
+            }}
+          </Query>
+        </section>
       </React.Fragment>
     );
   }
