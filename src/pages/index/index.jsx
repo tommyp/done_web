@@ -51,7 +51,7 @@ export default class extends React.Component {
           }}
         </Query>
 
-        <section className={styles.itemList}>
+        <section>
           <CreateItem cacheQuery={LIST_ITEMS} />
 
           <Query query={LIST_ITEMS} variables={{ date: this.date() }} key="2">
@@ -61,7 +61,7 @@ export default class extends React.Component {
 
               return (
                 <React.Fragment>
-                  <ul>
+                  <ul className={styles.itemList}>
                     {data.items.map(item => <Item item={item} key={item.id} />)}
                   </ul>
                 </React.Fragment>
