@@ -1,6 +1,7 @@
 import React from "react";
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
+import styles from "./item.module.scss";
 
 const UPDATE_COMPLETED = gql`
   mutation UpdateCompleted($id: Int!, $completed: Boolean!) {
@@ -12,13 +13,25 @@ const UPDATE_COMPLETED = gql`
 `;
 
 export default class extends React.Component {
+  itemName(item) {
+    if (item.completed) {
+      return (
+        <strike>
+          {item.name}
+        </strike>
+      );
+    } else {
+      return item.name;
+    }
+  }
+
   render() {
     const { item } = this.props;
 
     return (
-      <li>
+      <li className={styles.item}>
         <Mutation mutation={UPDATE_COMPLETED}>
-          {(updateCompleted, { data }) => (
+          {(updateCompleted, { data }) =>
             <input
               type="checkbox"
               checked={item.completed}
@@ -31,11 +44,9 @@ export default class extends React.Component {
                   }
                 });
               }}
-            />
-          )}
+            />}
         </Mutation>
-
-        {item.name}
+        {this.itemName(item)}
       </li>
     );
   }
