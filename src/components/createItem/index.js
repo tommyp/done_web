@@ -2,6 +2,7 @@ import React from "react";
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import styles from "./createItem.module.scss";
+import { currentDate } from "../../utils/currentDate";
 
 const CREATE_ITEM = gql`
   mutation CreateItem($name: String!) {
@@ -20,10 +21,14 @@ export default class extends React.Component {
       <Mutation
         mutation={CREATE_ITEM}
         update={(cache, { data: { createItem } }) => {
-          const { items } = cache.readQuery({ query: this.props.cacheQuery });
+          const { items } = cache.readQuery({
+            query: this.props.cacheQuery,
+            variables: { date: currentDate() }
+          });
           cache.writeQuery({
             query: this.props.cacheQuery,
-            data: { items: items.concat([createItem]) }
+            data: { items: items.concat([createItem]) },
+            variables: { date: currentDate() }
           });
         }}
       >
