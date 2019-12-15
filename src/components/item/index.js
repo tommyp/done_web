@@ -16,8 +16,13 @@ export default class extends React.Component {
   constructor(props) {
     super(props);
     this.handleMouseHover = this.handleMouseHover.bind(this);
+
+    const { item } = this.props;
+
     this.state = {
-      isHovering: false
+      isHovering: false,
+      isEditing: false,
+      item: item
     };
   }
 
@@ -45,9 +50,17 @@ export default class extends React.Component {
 
   toggleCompletedIcon(status) {
     if (status) {
-      return "❌";
+      return (
+        <span role="img" aria-label="Undone">
+          ❌
+        </span>
+      );
     } else {
-      return "✅";
+      return (
+        <span role="img" aria-label="Done">
+          ✅
+        </span>
+      );
     }
   }
 
@@ -60,6 +73,12 @@ export default class extends React.Component {
               <button
                 onClick={e => {
                   e.preventDefault();
+                  this.setState({
+                    item: {
+                      ...this.state.item,
+                      completed: !this.state.item.completed
+                    }
+                  });
                   updateCompleted({
                     variables: {
                       completed: !item.completed,
@@ -72,12 +91,39 @@ export default class extends React.Component {
               </button>}
           </Mutation>
         </li>
+        <li>
+          <button
+            onClick={e => {
+              e.preventDefault();
+              this.setState({ isEditing: true });
+            }}
+          >
+            <span role="img" aria-label="Edit">
+              ✏️
+            </span>
+          </button>
+        </li>
       </ul>
     );
   }
 
+  changeItem(e) {
+    this.setState({ itemName: e.target.value });
+  }
+
+  editItem(item) {
+    return (
+      <input
+        className="editItem"
+        type="text"
+        value={item.name}
+        onChange={this.changeItem}
+      />
+    );
+  }
+
   render() {
-    const { item } = this.props;
+    const item = this.state.item;
 
     return (
       <li
@@ -85,7 +131,8 @@ export default class extends React.Component {
         onMouseEnter={this.handleMouseHover}
         onMouseLeave={this.handleMouseHover}
       >
-        {this.itemName(item)}
+        {!this.state.isEditing && this.itemName(item)}
+        {this.state.isEditing && this.editItem(item)}
         {this.state.isHovering && this.actions(item)}
       </li>
     );
