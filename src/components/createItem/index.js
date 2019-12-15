@@ -1,6 +1,7 @@
 import React from "react";
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
+import styles from "./createItem.module.scss";
 
 const CREATE_ITEM = gql`
   mutation CreateItem($name: String!) {
@@ -26,9 +27,10 @@ export default class extends React.Component {
           });
         }}
       >
-        {createItem => (
+        {createItem =>
           <React.Fragment>
             <form
+              className={styles.createItem}
               onSubmit={e => {
                 e.preventDefault();
                 createItem({ variables: { name: input.value } });
@@ -36,14 +38,14 @@ export default class extends React.Component {
               }}
             >
               <input
+                type="text"
                 ref={node => {
                   input = node;
                 }}
               />
               <button type="submit">Submit</button>
             </form>
-          </React.Fragment>
-        )}
+          </React.Fragment>}
       </Mutation>
     );
   }

@@ -1,9 +1,12 @@
+@import "../../styles/variables.scss";
+@import "../../styles/type.scss";
+
 .item {
-  font-size: 22px;
+  @include mainFont;
   list-style: none;
   padding: 4px 0;
-  border-bottom: 1px solid #fff;
-  color: #fff;
+  border-bottom: 1px solid $textColor;
+  color: $textColor;
   margin: 4px 0;
   input[type="checkbox"] {
     // position: absolute;
