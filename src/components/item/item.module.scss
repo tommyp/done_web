@@ -4,13 +4,26 @@
 .item {
   @include mainFont;
   list-style: none;
-  padding: 4px 0;
-  border-bottom: 1px solid $textColor;
+  padding: 10px 5px;
   color: $textColor;
   margin: 4px 0;
+  background: rgba(#000, 0.1);
   input[type="checkbox"] {
     // position: absolute;
     margin-top: .6rem;
     margin-right: .6rem;
+  }
+  ul {
+    float: right;
+    list-style: none;
+    display: inline;
+    li {
+      display: inline;
+      button {
+        background: none;
+        border: none;
+        @include mainFont;
+      }
+    }
   }
 }

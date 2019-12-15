@@ -13,6 +13,24 @@ const UPDATE_COMPLETED = gql`
 `;
 
 export default class extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleMouseHover = this.handleMouseHover.bind(this);
+    this.state = {
+      isHovering: false
+    };
+  }
+
+  handleMouseHover() {
+    this.setState(this.toggleHoverState);
+  }
+
+  toggleHoverState(state) {
+    return {
+      isHovering: !state.isHovering
+    };
+  }
+
   itemName(item) {
     if (item.completed) {
       return (
@@ -25,28 +43,50 @@ export default class extends React.Component {
     }
   }
 
+  toggleCompletedIcon(status) {
+    if (status) {
+      return "❌";
+    } else {
+      return "✅";
+    }
+  }
+
+  actions(item) {
+    return (
+      <ul className="actions">
+        <li>
+          <Mutation mutation={UPDATE_COMPLETED}>
+            {(updateCompleted, { data }) =>
+              <button
+                onClick={e => {
+                  e.preventDefault();
+                  updateCompleted({
+                    variables: {
+                      completed: !item.completed,
+                      id: item.id
+                    }
+                  });
+                }}
+              >
+                {this.toggleCompletedIcon(item.completed)}
+              </button>}
+          </Mutation>
+        </li>
+      </ul>
+    );
+  }
+
   render() {
     const { item } = this.props;
 
     return (
-      <li className={styles.item}>
-        <Mutation mutation={UPDATE_COMPLETED}>
-          {(updateCompleted, { data }) =>
-            <input
-              type="checkbox"
-              checked={item.completed}
-              onChange={e => {
-                e.preventDefault();
-                updateCompleted({
-                  variables: {
-                    completed: !item.completed,
-                    id: item.id
-                  }
-                });
-              }}
-            />}
-        </Mutation>
+      <li
+        className={styles.item}
+        onMouseEnter={this.handleMouseHover}
+        onMouseLeave={this.handleMouseHover}
+      >
         {this.itemName(item)}
+        {this.state.isHovering && this.actions(item)}
       </li>
     );
   }
