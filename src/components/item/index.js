@@ -16,6 +16,8 @@ export default class extends React.Component {
   constructor(props) {
     super(props);
     this.handleMouseHover = this.handleMouseHover.bind(this);
+    this.changeItem = this.changeItem.bind(this);
+    this.updateItem = this.updateItem.bind(this);
 
     const { item } = this.props;
 
@@ -108,17 +110,30 @@ export default class extends React.Component {
   }
 
   changeItem(e) {
-    this.setState({ itemName: e.target.value });
+    this.setState({
+      item: {
+        ...this.state.item,
+        name: e.target.value
+      }
+    });
+  }
+
+  updateItem(e) {
+    e.preventDefault();
+    this.setState({ isEditing: false });
   }
 
   editItem(item) {
     return (
-      <input
-        className="editItem"
-        type="text"
-        value={item.name}
-        onChange={this.changeItem}
-      />
+      <form onSubmit={this.updateItem}>
+        <input
+          autoFocus={true}
+          className="editItem"
+          type="text"
+          value={item.name}
+          onChange={this.changeItem}
+        />
+      </form>
     );
   }
 

@@ -13,10 +13,18 @@
     margin-top: .6rem;
     margin-right: .6rem;
   }
+  input[type="text"] {
+    border: 0;
+    background: none;
+    @include mainFont;
+    color: #fff;
+    &:focus {
+      outline: 0;
+    }
+  }
   ul {
     float: right;
     list-style: none;
-    display: inline;
     li {
       display: inline;
       button {
@@ -25,5 +33,8 @@
         @include mainFont;
       }
     }
+  }
+  form {
+    display: inline;
   }
 }
