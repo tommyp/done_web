@@ -3,11 +3,19 @@ import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import styles from "./item.module.scss";
 
-const UPDATE_COMPLETED = gql`
-  mutation UpdateCompleted($id: Int!, $completed: Boolean!) {
-    updateCompleted(id: $id, completed: $completed) {
+const UPDATE_ITEM_COMPLETED = gql`
+  mutation UpdateItemCompleted($id: Int!, $completed: Boolean!) {
+    updateItemCompleted(id: $id, completed: $completed) {
       id
       completed
+    }
+  }
+`;
+
+const DELETE_ITEM = gql`
+  mutation Delete($id: Int!) {
+    delete(id: $id) {
+      id
     }
   }
 `;
@@ -38,11 +46,7 @@ export default class extends React.Component {
 
   itemName(item) {
     if (item.completed) {
-      return (
-        <strike>
-          {item.name}
-        </strike>
-      );
+      return <strike>{item.name}</strike>;
     } else {
       return item.name;
     }
@@ -68,8 +72,8 @@ export default class extends React.Component {
     return (
       <ul className="actions">
         <li>
-          <Mutation mutation={UPDATE_COMPLETED}>
-            {(updateCompleted, { data }) =>
+          <Mutation mutation={UPDATE_ITEM_COMPLETED}>
+            {(updateCompleted, { data }) => (
               <button
                 onClick={e => {
                   e.preventDefault();
@@ -88,7 +92,8 @@ export default class extends React.Component {
                 }}
               >
                 {this.toggleCompletedIcon(item.completed)}
-              </button>}
+              </button>
+            )}
           </Mutation>
         </li>
         <li>
@@ -102,6 +107,26 @@ export default class extends React.Component {
               ✏️
             </span>
           </button>
+        </li>
+        <li>
+          <Mutation mutation={DELETE_ITEM}>
+            {(deleteItem, { data }) => (
+              <button
+                onClick={e => {
+                  e.preventDefault();
+                  deleteItem({
+                    variables: {
+                      id: item.id
+                    }
+                  });
+                }}
+              >
+                <span role="img" aria-label="Delete">
+                  🗑
+                </span>
+              </button>
+            )}
+          </Mutation>
         </li>
       </ul>
     );
