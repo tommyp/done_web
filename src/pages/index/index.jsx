@@ -33,11 +33,7 @@ export default class extends React.Component {
             if (loading) return "Loading...";
             if (error) return "Error";
 
-            return (
-              <h1>
-                {data.profile.email}
-              </h1>
-            );
+            return <h1>{data.profile.email}</h1>;
           }}
         </Query>
 
@@ -52,7 +48,9 @@ export default class extends React.Component {
               return (
                 <React.Fragment>
                   <ul className={styles.itemList}>
-                    {data.items.map(item => <Item item={item} key={item.id} />)}
+                    {data.items.map(item => (
+                      <Item item={item} key={item.id} cacheQuery={LIST_ITEMS} />
+                    ))}
                   </ul>
                 </React.Fragment>
               );

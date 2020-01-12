@@ -2,6 +2,7 @@ import React from "react";
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import styles from "./item.module.scss";
+import { currentDate } from "../../utils/currentDate";
 
 const UPDATE_ITEM_COMPLETED = gql`
   mutation UpdateItemCompleted($id: Int!, $completed: Boolean!) {
@@ -13,8 +14,8 @@ const UPDATE_ITEM_COMPLETED = gql`
 `;
 
 const DELETE_ITEM = gql`
-  mutation Delete($id: Int!) {
-    delete(id: $id) {
+  mutation DeleteItem($id: Int!) {
+    deleteItem(id: $id) {
       id
     }
   }
@@ -109,7 +110,24 @@ export default class extends React.Component {
           </button>
         </li>
         <li>
-          <Mutation mutation={DELETE_ITEM}>
+          <Mutation
+            mutation={DELETE_ITEM}
+            update={(cache, { data: deleteItem }) => {
+              const date = currentDate();
+              const { items } = cache.readQuery({
+                query: this.props.cacheQuery,
+                variables: { date: date }
+              });
+
+              const idx = items.indexOf(deleteItem);
+
+              cache.writeQuery({
+                query: this.props.cacheQuery,
+                data: { items: items.splice(idx, 1) },
+                variables: { date: date }
+              });
+            }}
+          >
             {(deleteItem, { data }) => (
               <button
                 onClick={e => {
