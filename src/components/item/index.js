@@ -16,27 +16,29 @@ export default class extends React.Component {
     const { item } = this.props;
 
     return (
-      <li>
-        <Mutation mutation={UPDATE_COMPLETED}>
-          {(updateCompleted, { data }) => (
-            <input
-              type="checkbox"
-              checked={item.completed}
-              onChange={e => {
-                e.preventDefault();
-                updateCompleted({
-                  variables: {
-                    completed: !item.completed,
-                    id: item.id
-                  }
-                });
-              }}
-            />
-          )}
-        </Mutation>
-
-        {item.name}
-      </li>
+      <tr>
+        <td className="w-6">
+          <Mutation mutation={UPDATE_COMPLETED}>
+            {(updateCompleted, { data }) =>
+              <input
+                type="checkbox"
+                checked={item.completed}
+                onChange={e => {
+                  e.preventDefault();
+                  updateCompleted({
+                    variables: {
+                      completed: !item.completed,
+                      id: item.id
+                    }
+                  });
+                }}
+              />}
+          </Mutation>
+        </td>
+        <td>
+          {item.name}
+        </td>
+      </tr>
     );
   }
 }

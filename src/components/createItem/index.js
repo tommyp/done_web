@@ -26,7 +26,7 @@ export default class extends React.Component {
           });
         }}
       >
-        {createItem => (
+        {createItem =>
           <React.Fragment>
             <form
               onSubmit={e => {
@@ -36,14 +36,14 @@ export default class extends React.Component {
               }}
             >
               <input
+                type="text"
                 ref={node => {
                   input = node;
                 }}
               />
               <button type="submit">Submit</button>
             </form>
-          </React.Fragment>
-        )}
+          </React.Fragment>}
       </Mutation>
     );
   }

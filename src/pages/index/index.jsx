@@ -24,10 +24,14 @@ const LIST_ITEMS = gql`
 
 export default class extends React.Component {
   date() {
-    const date = new Date()
-    return date.getFullYear() + '-' +
-           ('0'+ (date.getMonth()+1)).slice(-2) + '-' +
-           ('0'+ date.getDate()).slice(-2);
+    const date = new Date();
+    return (
+      date.getFullYear() +
+      "-" +
+      ("0" + (date.getMonth() + 1)).slice(-2) +
+      "-" +
+      ("0" + date.getDate()).slice(-2)
+    );
   }
 
   render() {
@@ -38,28 +42,36 @@ export default class extends React.Component {
             if (loading) return "Loading...";
             if (error) return "Error";
 
-            return <h1>{data.profile.email}</h1>;
-          }}
-        </Query>
-
-        <CreateItem cacheQuery={LIST_ITEMS} />
-
-        <Query query={LIST_ITEMS} variables={{date: this.date()}} key="2">
-          {({ loading, error, data }) => {
-            if (loading) return "Loading...";
-            if (error) return "Error";
-
             return (
-              <React.Fragment>
-                <ul>
-                  {data.items.map(item => (
-                    <Item item={item} key={item.id} />
-                  ))}
-                </ul>
-              </React.Fragment>
+              <h1>
+                {data.profile.email}
+              </h1>
             );
           }}
         </Query>
+
+        <section className="w-full max-w-xl text-xl">
+          <CreateItem cacheQuery={LIST_ITEMS} />
+
+          <Query query={LIST_ITEMS} variables={{ date: this.date() }} key="2">
+            {({ loading, error, data }) => {
+              if (loading) return "Loading...";
+              if (error) return "Error";
+
+              return (
+                <React.Fragment>
+                  <table className="w-full">
+                    <tbody>
+                      {data.items.map(item =>
+                        <Item item={item} key={item.id} />
+                      )}
+                    </tbody>
+                  </table>
+                </React.Fragment>
+              );
+            }}
+          </Query>
+        </section>
       </React.Fragment>
     );
   }
